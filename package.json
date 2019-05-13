@@ -13,9 +13,8 @@
   },
   "main": "./lib",
   "scripts": {
-    "demo": "node ./bin/mora-proxy --port 8100 --config ./lib/proxy.config.js",
+    "demo": "npm run build && node ./bin/mora-proxy --port 8101 --config ./lib/proxy.config.js",
     "build": "rm -rf lib && babel src --out-dir lib",
-    "start": "webpack",
     "test": "babel-node node_modules/.bin/babel-istanbul cover node_modules/.bin/_mocha --no-timeouts",
     "debug": "mocha --require babel-core/register --no-timeouts",
     "lint": "eslint --ext .js src",

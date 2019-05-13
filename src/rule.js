@@ -45,16 +45,23 @@ module.exports = function(args) {
         let isModified = false;
         const newRequestOptions = requestOptions;
         // 批量匹配规则
-        batchMatch(req, getProxyConfig(), (val, pattern) => {
+        const matched = batchMatch(req, getProxyConfig(), (val, pattern) => {
           const callback = function(response) {
+            const headers = {
+              'access-control-allow-origin': '*',
+              'access-control-allow-headers':
+                'Origin, X-Requested-With, Content-Type, Accept,Content-Range, Content-Disposition, Content-Description,Set-Cookie,, Access-Control-Request-Method, Access-Control-Request-Headers,Authorization,Authentication',
+              'access-control-allow-methods':
+                'GET,POST,PUT,DELETE,PATCH,HEAD,OPTIONS',
+              'access-control-expose-headers':
+                'Set-Cookie,Authorization,Authentication',
+            };
+            const mergedHeaders = {
+              ...response.header,
+              ...headers,
+            };
+            response.header = mergedHeaders;
             req.response = response;
-            req.requestOptions.headers = {
-              ...req.requestOptions.headers,
-            'access-control-allow-origin': '*',
-            'access-control-allow-headers':'Origin, X-Requested-With, Content-Type, Accept,Content-Range, Content-Disposition, Content-Description,Set-Cookie,, Access-Control-Request-Method, Access-Control-Request-Headers,Authorization,Authentication',
-            'access-control-allow-methods':'GET,POST,PUT,DELETE,PATCH,HEAD,OPTIONS',
-            'access-control-expose-headers':'Set-Cookie,Authorization,Authentication' 
-            }
             resolve(req);
           };
           const payloadStr = req.requestData.toString();
@@ -74,24 +81,22 @@ module.exports = function(args) {
               } matches ${pattern}, respond with custom function`,
             );
             val(req, getRes(req, callback));
-          }
-          // 处理本地路径问题
-          if (typeof val === 'string' && !isRemote(val)) {
-            log.info(
-              `${method} ${
-                req.url
-              } matches ${pattern}, respond with local file`,
-            );
-            getRes(req, callback).end(readFileSync(join(cwd, val), 'utf-8'));
-          }
-          // 处理obj或者array类型
-          if (isPlainObject(val) || Array.isArray(val)) {
+          } else if (isPlainObject(val) || Array.isArray(val)) {
+            // 处理obj或者array类型
             console.info(
               `${method} ${
                 req.url
               } matches ${pattern}, respond with object or array`,
             );
             getRes(req, callback).json(val);
+          } else if (typeof val === 'string' && !isRemote(val)) {
+            // 处理本地路径问题
+            log.info(
+              `${method} ${
+                req.url
+              } matches ${pattern}, respond with local file`,
+            );
+            getRes(req, callback).end(readFileSync(join(cwd, val), 'utf-8'));
           }
           // 处理服务器代理
           const reqObj = urlLib.parse(req.url);
@@ -125,26 +130,25 @@ module.exports = function(args) {
           }
           if (typeof val === 'string' && isRemote(val)) {
             console.info(
-              `${method} ${
-                req.url
-              } matches ${pattern}, forward to ${val}`,
+              `${method} ${req.url} matches ${pattern}, forward to ${val}`,
             );
             isModified = true;
             setOption(val);
             req.requestOptions = newRequestOptions;
             resolve(req);
           }
+          return true;
         });
         // 处理未匹配规则
-        if (!isModified) {
+        if (!isModified && !matched) {
           if (args.hostname === '127.0.0.1') {
             // 未匹配且未定义本地接口, 直接忽略, 不转发
             const response = {
               statusCode: 200,
               header: { 'Content-Type': 'application/json' },
-              body: '{"msg": "proxy.config.js 为定义该接口"}'
-            }
-            req.response = response
+              body: '{"msg": "proxy.config.js 为定义该接口"}',
+            };
+            req.response = response;
             resolve(req);
           } else {
             newRequestOptions.hostname = args.hostname;
