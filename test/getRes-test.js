@@ -16,7 +16,9 @@ describe('getRes', function() {
   before(done => {
     dora({
       port,
-      plugins: [`../../../src/index?port=${proxyPort}&config=proxy.config.res.js`],
+      plugins: [
+        `../../../src/index?port=${proxyPort}&config=proxy.config.res.js`,
+      ],
       cwd: join(__dirname, './fixtures/proxy'),
       verbose: true,
     });
@@ -25,23 +27,29 @@ describe('getRes', function() {
 
   it('json', done => {
     request(getUrl('/test/res/json?a=1'), (err, res, body) => {
-      expect(body).toEqual(JSON.stringify({
-        query: {
-          a: '1'
-        }
-      }));
+      expect(body).toEqual(
+        JSON.stringify({
+          query: {
+            a: '1',
+          },
+        }),
+      );
       done();
     });
   });
 
   it('jsonp with query', done => {
     request(getUrl('/test/res/jsonp?a=1&callback=jsonp'), (err, res, body) => {
-      expect(body).toEqual('jsonp(' + JSON.stringify({
-        query: {
-          a: '1',
-          callback: 'jsonp'
-        }
-      }) + ')');
+      expect(body).toEqual(
+        'jsonp(' +
+          JSON.stringify({
+            query: {
+              a: '1',
+              callback: 'jsonp',
+            },
+          }) +
+          ')',
+      );
       done();
     });
   });
@@ -49,12 +57,16 @@ describe('getRes', function() {
   it('jsonp without query', done => {
     request(getUrl('/test/res/jsonp'), (err, res, body) => {
       expect(res.statusCode).toBe(400);
-      expect(body).toEqual(JSON.stringify({
-        errors: [{
-          status: 400,
-          detail: 'Should provide a callback for JSONP'
-        }]
-      }));
+      expect(body).toEqual(
+        JSON.stringify({
+          errors: [
+            {
+              status: 400,
+              detail: 'Should provide a callback for JSONP',
+            },
+          ],
+        }),
+      );
       done();
     });
   });
@@ -62,12 +74,16 @@ describe('getRes', function() {
   it('jsonp without callback', done => {
     request(getUrl('/test/res/jsonp?a=1'), (err, res, body) => {
       expect(res.statusCode).toBe(400);
-      expect(body).toEqual(JSON.stringify({
-        errors: [{
-          status: 400,
-          detail: 'Should provide a callback for JSONP'
-        }]
-      }));
+      expect(body).toEqual(
+        JSON.stringify({
+          errors: [
+            {
+              status: 400,
+              detail: 'Should provide a callback for JSONP',
+            },
+          ],
+        }),
+      );
       done();
     });
   });

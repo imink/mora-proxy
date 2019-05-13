@@ -5,15 +5,18 @@
     "type": "git",
     "url": ""
   },
-  "homepage": "",
-  "author": "",
+  "homepage": "https://github.com/imink/mora-proxy",
+  "author": "imink",
   "license": "MIT",
-  "main": "./bin/mora-proxy",
+  "bin": {
+    "mora-mock": "./bin/mora-mock"
+  },
+  "main": "./lib",
   "scripts": {
     "start": "node ./bin/mockmock --port 8100 --config ./lib/proxy.config.js",
     "build": "rm -rf lib && babel src --out-dir lib",
     "test": "babel-node node_modules/.bin/babel-istanbul cover node_modules/.bin/_mocha --no-timeouts",
-    "debug": "./node_modules/.bin/mocha --require babel-core/register --no-timeouts",
+    "debug": "mocha --require babel-core/register --no-timeouts",
     "lint": "eslint --ext .js src",
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
@@ -45,6 +48,20 @@
   },
   "peerDependencies": {},
   "files": [
-    "lib"
+    "bin",
+    "lib",
+    "package.json",
+    "README.md"
+  ],
+  "description": "[![NPM version](https://img.shields.io/npm/v/dora-plugin-proxy.svg?style=flat)](https://npmjs.org/package/dora-plugin-proxy) [![Build Status](https://img.shields.io/travis/dora-js/dora-plugin-proxy.svg?style=flat)](https://travis-ci.org/dora-js/dora-plugin-proxy) [![Coverage Status](https://img.shields.io/coveralls/dora-js/dora-plugin-proxy.svg?style=flat)](https://coveralls.io/r/dora-js/dora-plugin-proxy) [![NPM downloads](http://img.shields.io/npm/dm/dora-plugin-proxy.svg?style=flat)](https://npmjs.org/package/dora-plugin-proxy)",
+  "directories": {
+    "doc": "docs",
+    "example": "examples",
+    "lib": "lib",
+    "test": "test"
+  },
+  "keywords": [
+    "mock",
+    "proxy"
   ]
 }
