@@ -116,9 +116,11 @@ module.exports = function(args) {
             // Fix anyproxy
             delete newRequestOptions.headers.host;
           }
-          if (isRemote(val)) {
+          if (typeof val === 'string' && isRemote(val)) {
             console.info(
-              `${method} ${req.url} matches ${pattern}, forward to ${val}`,
+              `${method} ${
+                req.url
+              } matches ${pattern}, forward to ${val}`,
             );
             isModified = true;
             setOption(val);
