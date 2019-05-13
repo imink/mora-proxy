@@ -9,7 +9,7 @@
   "author": "imink",
   "license": "MIT",
   "bin": {
-    "mora-mock": "./bin/mora-mock"
+    "mora-proxy": "./bin/mora-proxy"
   },
   "main": "./lib",
   "scripts": {
