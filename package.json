@@ -1,0 +1,50 @@
+{
+  "name": "mora-proxy",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "homepage": "",
+  "author": "",
+  "license": "MIT",
+  "main": "./bin/mora-proxy",
+  "scripts": {
+    "start": "node ./bin/mockmock --port 8100 --config ./lib/proxy.config.js",
+    "build": "rm -rf lib && babel src --out-dir lib",
+    "test": "babel-node node_modules/.bin/babel-istanbul cover node_modules/.bin/_mocha --no-timeouts",
+    "debug": "./node_modules/.bin/mocha --require babel-core/register --no-timeouts",
+    "lint": "eslint --ext .js src",
+    "coveralls": "cat ./coverage/lcov.info | coveralls"
+  },
+  "pre-commit": [],
+  "dependencies": {
+    "@babel/polyfill": "^7.4.4",
+    "anyproxy": "^4.1.0",
+    "crequire": "^1.7.0",
+    "is-plain-object": "~2.0.1",
+    "mime-db": "~1.21.0",
+    "mime-type": "~3.0.4",
+    "path-to-regexp": "~1.2.1",
+    "qs": "~6.0.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.4",
+    "@babel/preset-env": "^7.4.4",
+    "@babel/preset-react": "^7.0.0",
+    "babel-istanbul": "^0.6.0",
+    "commander": "^2.20.0",
+    "coveralls": "^2.11.6",
+    "eslint": "~1.10.3",
+    "eslint-config-airbnb": "~3.1.0",
+    "expect": "~1.13.0",
+    "mocha": "~2.4.1",
+    "pre-commit": "~1.1.2",
+    "request": "^2.67.0"
+  },
+  "peerDependencies": {},
+  "files": [
+    "lib"
+  ]
+}

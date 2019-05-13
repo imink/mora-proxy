@@ -1,0 +1,19 @@
+#!/usr/bin/env node
+var cp = require('child_process');
+var fs = require('fs');
+var path = require('path');
+
+var program = require('commander');
+
+program
+  .version(require('../package').version, '-v, --version')
+  .option('-p, --port <n>', 'proxy port. Default: 8989')
+  .option('--verbose', 'run with more logging messages.')
+  .option('-c, --config <config>', 'mock config file')
+  .parse(process.argv);
+
+require('../lib')({
+  port: program.port || '8989',
+  mockConfig: program.config,
+  verbose: program.verbose !== undefined ? program.verbose : null,
+});
