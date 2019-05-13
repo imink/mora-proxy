@@ -48,6 +48,13 @@ module.exports = function(args) {
         batchMatch(req, getProxyConfig(), (val, pattern) => {
           const callback = function(response) {
             req.response = response;
+            req.requestOptions.headers = {
+              ...req.requestOptions.headers,
+            'access-control-allow-origin': '*',
+            'access-control-allow-headers':'Origin, X-Requested-With, Content-Type, Accept,Content-Range, Content-Disposition, Content-Description,Set-Cookie,, Access-Control-Request-Method, Access-Control-Request-Headers,Authorization,Authentication',
+            'access-control-allow-methods':'GET,POST,PUT,DELETE,PATCH,HEAD,OPTIONS',
+            'access-control-expose-headers':'Set-Cookie,Authorization,Authentication' 
+            }
             resolve(req);
           };
           const payloadStr = req.requestData.toString();
