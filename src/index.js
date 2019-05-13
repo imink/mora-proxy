@@ -17,7 +17,7 @@ module.exports = function(args) {
     rule,
   });
   proxyServer.on('ready', () => {
-    console.log('ready', port);
+    console.log('Mora-proxy listent on: ', port);
   });
   proxyServer.on('error', e => {
     /* */
