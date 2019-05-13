@@ -19,7 +19,7 @@
     "test": "babel-node node_modules/.bin/babel-istanbul cover node_modules/.bin/_mocha --no-timeouts",
     "debug": "mocha --require babel-core/register --no-timeouts",
     "lint": "eslint --ext .js src",
-    "publish": "npm run build && git add . && git commit -m \"patch: upgrade\" && git push && npm version patch && npm publish",
+    "publish-patch": "npm run build && git add . && git commit -m \"patch: upgrade\" && git push && npm version patch && npm publish",
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "pre-commit": [],
