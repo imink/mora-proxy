@@ -22,13 +22,13 @@ export default function getProxyConfig(configPath, args) {
 
   function loadFile() {
     if (!cache && existsSync(proxyFile)) {
-      log.debug(`reload ${configPath}`);
+      log.info(`reload ${configPath}`);
       const depList = cdeps(proxyFile);
       depList.forEach(dep => delete require.cache[require.resolve(dep)]);
       Object.keys(require.cache).forEach(key => {
         watchDirs.forEach(watchDir => {
           if (key.indexOf(watchDir) === 0) {
-            log.debug(`DELETE CACHE REQUIRE: ${key}`);
+            log.info(`DELETE CACHE REQUIRE: ${key}`);
             delete require.cache[key];
           }
         });
